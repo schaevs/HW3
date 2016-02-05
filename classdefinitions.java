@@ -5,36 +5,47 @@ public class classdefinitions{
 		Sequence list = new Sequence();
 
 	    list.add(new MyInteger(0),0);
-		printcheck(list);
+		//printcheck(list);
 		
 	    list.add(new MyInteger(1),0);
-		printcheck(list);
+		//printcheck(list);
 		
 	    list.add(new MyInteger(2),0);
-		printcheck(list);
+		//printcheck(list);
 		
 	    list.add(new MyInteger(3),0);
-		printcheck(list);
+		//printcheck(list);
 		
 	    list.add(new MyInteger(4),0);
-		printcheck(list);
+		//printcheck(list);
 		
 		list.add(new MyInteger(5),5);
-		printcheck(list);
+		//printcheck(list);
 		
 		list.add(new MyInteger(6),5);
-		printcheck(list);
+		//printcheck(list);
 		
 		list.add(new MyInteger(7),7);
-		printcheck(list);
+		//printcheck(list);
 		
+		list.add(new MyChar('f'),8);
+		
+		list.add(new Sequence(),9);
+		
+		
+		list.PrintElement();
+		
+		printcheck(list);
+		list.delete(5);
+		
+		printcheck(list);
 		//list.get(1).printLink();	
 	}
 	
 	public static void printcheck(Sequence checkedSequence)
 	{
-		System.out.println("\n\nsequence count is: " + checkedSequence.sequenceCount);
-		for (int j = 0; j<checkedSequence.sequenceCount; j++){
+		System.out.println("\n\nsequence count is: " + checkedSequence.length());
+		for (int j = 0; j<checkedSequence.length(); j++){
 			System.out.println("printing "+ ((checkedSequence.get(j)).n1).i);
 		}
 		
@@ -79,7 +90,7 @@ class MyChar extends Element {
 		this.c = val;
 	}
 	public void PrintElement(){
-		System.out.print(this.c);
+		System.out.print("'" + this.c + "'");
 	}
 }
 
@@ -97,7 +108,7 @@ class MyInteger extends Element {
 		this.i = val;
 	}			
 	public void PrintElement(){
-		System.out.print(this.i);
+		System.out.print(" " + this.i + " ");
 	}
 }
 
@@ -108,11 +119,7 @@ class Link{
 	
 	public Link(Element n1arg){
 		n1 = n1arg;
-	}
-	public void printLink() {
-		    System.out.println(n1 + ",");
-	    }
-		
+	}	
 }
 
 class Sequence extends Element {
@@ -123,37 +130,28 @@ class Sequence extends Element {
 	//should include dynamic sizing and other functions mentioned in hw
 	
 	private Link head;
-	public int sequenceCount;
+	private int sequenceCount;
 	
 	public Sequence(){
 		head = null;
 		sequenceCount = 0;
 	}
-	public void PrintElement(){
-		
-	}
-	
-	/*public void printSequence() {
-		    Link currentLink = head;
-		    System.out.print("List: ");
-		    while(currentLink != null) {
-			    currentLink.printLink();
-			    currentLink = currentLink.nextLink;
-		    }
-		    System.out.println("");
-	}*/
-	
-	/*public void insert(Element n1)){
-		Link link = new Link(n1);
-		link.nextLink = head;
-		head = link;
-	}*/
 	Link get(int index){
 		
 		Link gottenLink=head;
 		for(int i=0; i<index; i++)
 			gottenLink = gottenLink.nextLink;
 		return gottenLink;		
+	}
+	
+	public Element index(int pos){
+		if (pos>sequenceCount-1){
+			//error
+		}
+		else{
+			return this.get(pos);
+		}
+		
 	}
 	
 	/*Element first(){
@@ -166,10 +164,10 @@ class Sequence extends Element {
 		// returns the rest of the elements in the sequence
 		// without creating a new sequence, only pointing to the rest of the orig sequence
 	}
-	
+	*/
 	int length(){
-		// returns number of elements in Sequence object
-	}*/
+		return this.sequenceCount;
+	}
 	void add(Element elm, int pos){
 		// method to add an element in a specified position
 		// if element already exists at pos, elm is inserted at pos
@@ -193,6 +191,17 @@ class Sequence extends Element {
 	void delete(int pos) {
 		// method to remove an element at specified position
 		// after deleting, all elements to the right are pushed to the left
+		(this.get(pos-1)).nextLink = (this.get(pos)).nextLink;
+		sequenceCount--;
+	}
+	
+	public void PrintElement(){
+		System.out.print(" [");
+		for (int p=0; p < sequenceCount; p++){
+			((this.get(p)).n1).PrintElement();
+			//System.out.print(" ");
+		}
+		System.out.print("] ");
 	}
 	
 	void PrintSequence() {
