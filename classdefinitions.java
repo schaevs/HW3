@@ -4,13 +4,40 @@ public class classdefinitions{
 	public static void main(String[] args){
 		Sequence list = new Sequence();
 
-	    list.add(new MyInteger(),0);
-	    list.add(new MyInteger(),0);
-	    list.add(new MyInteger(),1);
-	    list.add(new MyInteger(),3);
-	    list.add(new MyInteger(),2);
+	    list.add(new MyInteger(0),0);
+		printcheck(list);
 		
-		list.get(2).printLink();
+	    list.add(new MyInteger(1),0);
+		printcheck(list);
+		
+	    list.add(new MyInteger(2),0);
+		printcheck(list);
+		
+	    list.add(new MyInteger(3),0);
+		printcheck(list);
+		
+	    list.add(new MyInteger(4),0);
+		printcheck(list);
+		
+		list.add(new MyInteger(5),5);
+		printcheck(list);
+		
+		list.add(new MyInteger(6),5);
+		printcheck(list);
+		
+		list.add(new MyInteger(7),7);
+		printcheck(list);
+		
+		//list.get(1).printLink();	
+	}
+	
+	public static void printcheck(Sequence checkedSequence)
+	{
+		System.out.println("\n\nsequence count is: " + checkedSequence.sequenceCount);
+		for (int j = 0; j<checkedSequence.sequenceCount; j++){
+			System.out.println("printing "+ ((checkedSequence.get(j)).n1).i);
+		}
+		
 	}
 }
 
@@ -27,6 +54,9 @@ abstract class Element{
 	public void Set(Element e){
 		this = e;
 	}*/
+		
+		char c;
+		int i;
 	
 	// Define PRint to be an abstract method
 	abstract void PrintElement();
@@ -34,10 +64,14 @@ abstract class Element{
 }
 
 class MyChar extends Element {
-	char c;
 	public MyChar(){
 		c = '0';
 	}
+	public MyChar(char value){
+		c = value;
+	}
+	
+	
 	public char Get(){
 		return this.c;
 	}
@@ -50,9 +84,11 @@ class MyChar extends Element {
 }
 
 class MyInteger extends Element {
-	int i;
 	public MyInteger(){
 		i = 0;
+	}
+	public MyInteger(int value){
+		i = value;
 	}
 	public int Get(){
 		return this.i;
@@ -74,7 +110,7 @@ class Link{
 		n1 = n1arg;
 	}
 	public void printLink() {
-		    System.out.print(n1 + ",");
+		    System.out.println(n1 + ",");
 	    }
 		
 }
@@ -87,7 +123,7 @@ class Sequence extends Element {
 	//should include dynamic sizing and other functions mentioned in hw
 	
 	private Link head;
-	private int sequenceCount;
+	public int sequenceCount;
 	
 	public Sequence(){
 		head = null;
@@ -140,14 +176,18 @@ class Sequence extends Element {
 		// all elements starting at location pos are pushed to the right
 		// if pos is not between 0 and length of Sequence, throw error
 	
-		
-		Link newLink = new Link(elm);
-		newLink.nextLink = this.get(pos);
-		if (this.get(pos-1)==null)
-			head = newLink;
-		else
-			this.get(pos-1).nextLink = newLink;
-		sequenceCount++;
+		if (pos > sequenceCount){
+			//error
+		}
+		else{
+			Link newLink = new Link(elm);
+			newLink.nextLink = this.get(pos);
+			if (pos == 0)
+				head = newLink;
+			else
+				(this.get(pos-1)).nextLink = newLink;
+			sequenceCount++;
+		}
 	}
 	
 	void delete(int pos) {
