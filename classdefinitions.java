@@ -30,23 +30,45 @@ public class classdefinitions{
 		
 		list.add(new MyChar('f'),8);
 		
-		list.add(new Sequence(),9);
+		Sequence list2 = new Sequence();
 		
+		list2.add(new MyChar('g'),0);
 		
+		System.out.println("checking list2 ");
+		list2.PrintElement();
+		System.out.println("checking list ");
 		list.PrintElement();
 		
-		printcheck(list);
-		list.delete(5);
+		list.add(list2,1);
 		
-		printcheck(list);
+		System.out.println("added list2 to list ... checking list ");
+		list.PrintElement();
+		
+		Sequence list3 = list.copy();
+		
+		System.out.println("printing the copy");
+		list3.PrintElement();
+			
+		
+		//printcheck(list);
+		//list.delete(5);
+		
+		//printcheck(list);
+		
+		
+		//System.out.println("checking copy");
+		
+		//(list.copy()).PrintElement();
+		
+		
 		//list.get(1).printLink();	
 	}
 	
 	public static void printcheck(Sequence checkedSequence)
 	{
 		System.out.println("\n\nsequence count is: " + checkedSequence.length());
-		for (int j = 0; j<checkedSequence.length(); j++){
-			System.out.println("printing "+ ((checkedSequence.get(j)).n1).i);
+		for (int k = 0; k<checkedSequence.length(); k++){
+			System.out.println("printing "+ ((checkedSequence.get(k)).n1).i);
 		}
 		
 	}
@@ -136,6 +158,54 @@ class Sequence extends Element {
 		head = null;
 		sequenceCount = 0;
 	}
+	public Sequence copy(){
+		Sequence nwSeq = new Sequence();
+		/*for (int i=0; i < sequenceCount; i++){
+			if ((this.get(i)).n1 instanceof Sequence){
+				nwSeq.add( (Sequence)((this.get(i)).n1).copy() );
+			}
+			else {
+				nwSeq.add((this.get(i)).n1,nwSeq.sequenceCount);
+			}
+		}*/
+			int j = 0;
+			int index = 0;
+			System.out.println("LOOK AT ME " + index);
+
+			for (Element e = (this.head).n1; j<this.sequenceCount; e = (((this.rest()).head).n1)){
+				if (e instanceof Sequence){
+					((Sequence)e).copy();
+					System.out.println("Bruh");
+				}
+				else{
+					nwSeq.add(e,index);
+					System.out.println(e.i + "or " + e.c + " added to index  " + index);
+					index++;
+				}
+				if (j==sequenceCount-1)
+					break;
+				j++;
+			}
+			return nwSeq;
+		
+	}
+	
+	public Sequence flatten(){
+		//returns a flattened sequence object
+		Sequence flSequence = new Sequence();
+		Sequence tempSequence = new Sequence();
+		int i = 0;
+		
+		while (!((this.get(i)).n1 instanceof Sequence)){
+			
+			
+		}
+		
+		
+		return flSequence;
+		
+	}
+	
 	Link get(int index){
 		
 		Link gottenLink=head;
@@ -148,23 +218,27 @@ class Sequence extends Element {
 		if (pos>sequenceCount-1){
 			//error
 		}
-		else{
-			return this.get(pos);
-		}
+		
+			return (this.get(pos)).n1;
+		
 		
 	}
 	
-	/*Element first(){
+	Element first(){
 		// returns first element of sequence
 		// pointer to the first and last element
 		// -- implement linked list
 		//Element * ptr = ;
+		
+		return (get(0)).n1;
 	}
 	Sequence rest(){
 		// returns the rest of the elements in the sequence
 		// without creating a new sequence, only pointing to the rest of the orig sequence
+		this.head = this.get(1);
+		return this;
 	}
-	*/
+	
 	int length(){
 		return this.sequenceCount;
 	}
