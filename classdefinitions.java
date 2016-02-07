@@ -32,7 +32,10 @@ public class classdefinitions{
 		
 		Sequence list2 = new Sequence();
 		
-		list2.add(new MyChar('g'),0);
+		list2.add(new MyChar('O'),0);
+		Sequence list4 = new Sequence();
+		list4.add(new MyChar('G'),0);
+		list2.add(list4,1);
 		
 		System.out.println("checking list2 ");
 		list2.PrintElement();
@@ -50,8 +53,8 @@ public class classdefinitions{
 		list3.PrintElement();
 		
 		
-		//System.out.println("printing the flat version");
-		//(list3.flatten()).PrintElement();
+		System.out.println("printing the flat version");
+		(list3.flatten()).PrintElement();
 		
 		//printcheck(list);
 		//list.delete(5);
@@ -194,33 +197,55 @@ class Sequence extends Element {
 			return nwSeq;
 		
 	}
-	/*public static int j;
-	public static Sequence flSeq = new Sequence();
+	public static int flIndex;
 	
 	public Sequence flatten(){
+		Sequence nwSeq = new Sequence();
+		Sequence olSeq = this.copy();
+		flIndex = 0;
+		flatten2(olSeq,nwSeq);
+			
 		
-		flSeq.head = null;
-		flSeq.sequenceCount = 0;
-		j = 0; //iterator for Elements in OG sequence
+		//flSeq.head = null;
+		//flSeq.sequenceCount = 0;
+		//j = 0; //iterator for Elements in OG sequence
 	
 		//int index = 0; //iterator for new sequence
-		this.flatten2();
-		return flSeq;
+		//this.flatten2();
+		
+		return nwSeq;
 		
 	}
 	
-	public void flatten2(){
-		//int index = 0; //iterator for new sequence
-		int k = 0;
-		for (Element e = (this.head).n1; k<this.sequenceCount; e = (((this.rest()).head).n1)){
+	
+	
+	public static void flatten2(Sequence notFlat, Sequence toFlatten){
+		int j = 0;
+		for (Element e = (notFlat.head).n1; j<notFlat.sequenceCount; e = (((notFlat.rest()).head).n1)){
+			
 			if (e instanceof Sequence){
-				((Sequence)e).flatten2();
-				k++;
+				flatten2((Sequence) e, toFlatten);
 			}
 			else{
-				flSeq.add(e,j);
-				j++;
-				k++;
+				toFlatten.add(e,flIndex);
+				flIndex++;	
+			}
+			
+			if (j == (notFlat.sequenceCount)-1){
+				break;
+			}
+			j++;
+		}
+		
+	}
+	/*public void append(Sequence s){
+		for (Element e = (this.head).n1; j<this.sequenceCount; e = (((this.rest()).head).n1)){
+			if (e instanceof Sequence){		
+				s.append((Sequence)e)
+			}
+			else{
+				this.
+				
 			}
 		}
 	}*/
