@@ -48,7 +48,10 @@ public class classdefinitions{
 		
 		System.out.println("printing the copy");
 		list3.PrintElement();
-			
+		
+		
+		//System.out.println("printing the flat version");
+		//(list3.flatten()).PrintElement();
 		
 		//printcheck(list);
 		//list.delete(5);
@@ -170,16 +173,18 @@ class Sequence extends Element {
 		}*/
 			int j = 0;
 			int index = 0;
-			System.out.println("LOOK AT ME " + index);
+			//System.out.println("LOOK AT ME " + index);
 
 			for (Element e = (this.head).n1; j<this.sequenceCount; e = (((this.rest()).head).n1)){
 				if (e instanceof Sequence){
-					((Sequence)e).copy();
-					System.out.println("Bruh");
+					nwSeq.add(((Sequence)e).copy(),index);
+					//System.out.println("sequence "+ " added to index  " + index);
+					index++;
+					//System.out.println("Bruh");
 				}
 				else{
 					nwSeq.add(e,index);
-					System.out.println(e.i + "or " + e.c + " added to index  " + index);
+					//System.out.println(e.i + "or " + e.c + " added to index  " + index);
 					index++;
 				}
 				if (j==sequenceCount-1)
@@ -189,22 +194,36 @@ class Sequence extends Element {
 			return nwSeq;
 		
 	}
+	/*public static int j;
+	public static Sequence flSeq = new Sequence();
 	
 	public Sequence flatten(){
-		//returns a flattened sequence object
-		Sequence flSequence = new Sequence();
-		Sequence tempSequence = new Sequence();
-		int i = 0;
 		
-		while (!((this.get(i)).n1 instanceof Sequence)){
-			
-			
-		}
-		
-		
-		return flSequence;
+		flSeq.head = null;
+		flSeq.sequenceCount = 0;
+		j = 0; //iterator for Elements in OG sequence
+	
+		//int index = 0; //iterator for new sequence
+		this.flatten2();
+		return flSeq;
 		
 	}
+	
+	public void flatten2(){
+		//int index = 0; //iterator for new sequence
+		int k = 0;
+		for (Element e = (this.head).n1; k<this.sequenceCount; e = (((this.rest()).head).n1)){
+			if (e instanceof Sequence){
+				((Sequence)e).flatten2();
+				k++;
+			}
+			else{
+				flSeq.add(e,j);
+				j++;
+				k++;
+			}
+		}
+	}*/
 	
 	Link get(int index){
 		
