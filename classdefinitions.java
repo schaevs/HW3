@@ -50,24 +50,24 @@ public class classdefinitions{
 		Sequence list3 = list.copy();
 		
 		System.out.println("printing the copy");
-		list3.PrintElement();
-		
+		//list3.PrintElement();
 		
 		System.out.println("printing the flat version");
 		(list3.flatten()).PrintElement();
 		
-		//printcheck(list);
-		//list.delete(5);
+		//testing Part 4
 		
-		//printcheck(list);
-		
-		
-		//System.out.println("checking copy");
-		
-		//(list.copy()).PrintElement();
-		
-		
-		//list.get(1).printLink();	
+		SequenceIterator it = new SequenceIterator();
+		if (it.equal(list3.end()))
+			System.out.println("Equal");
+
+/*
+		for (it = list3.begin(); !it.equal(list3.end()); it.advance()) {
+			// not working because?
+			System.out.println("I'm woking...");
+			//(it.sqPtr).n1.PrintElement();
+		} */
+
 	}
 	
 	public static void printcheck(Sequence checkedSequence)
@@ -87,12 +87,6 @@ abstract class Element{
 	public Element(){
 		
 	}
-	/*public Element Get(){
-		return this;
-	}
-	public void Set(Element e){
-		this = e;
-	}*/
 		
 		char c;
 		int i;
@@ -100,6 +94,14 @@ abstract class Element{
 	// Define PRint to be an abstract method
 	abstract void PrintElement();
 	
+}
+
+class MyDummy extends Element {
+	public MyDummy(){
+		int i = -1;
+	}
+	public void PrintElement(){
+	}
 }
 
 class MyChar extends Element {
@@ -147,6 +149,9 @@ class Link{
 	
 	public Link(Element n1arg){
 		n1 = n1arg;
+	}
+
+	public Link(){
 	}	
 }
 
@@ -158,7 +163,7 @@ class Sequence extends Element {
 	//should include dynamic sizing and other functions mentioned in hw
 	
 	private Link head;
-	private int sequenceCount;
+	public int sequenceCount;
 	
 	public Sequence(){
 		head = null;
@@ -200,11 +205,12 @@ class Sequence extends Element {
 	public static int flIndex;
 	
 	public Sequence flatten(){
+
 		Sequence nwSeq = new Sequence();
 		Sequence olSeq = this.copy();
 		flIndex = 0;
 		flatten2(olSeq,nwSeq);
-			
+		
 		
 		//flSeq.head = null;
 		//flSeq.sequenceCount = 0;
@@ -212,7 +218,9 @@ class Sequence extends Element {
 	
 		//int index = 0; //iterator for new sequence
 		//this.flatten2();
-		
+
+		nwSeq.sequenceCount = flIndex;
+		System.out.println("sqCount: " + nwSeq.sequenceCount);
 		return nwSeq;
 		
 	}
@@ -222,13 +230,13 @@ class Sequence extends Element {
 	public static void flatten2(Sequence notFlat, Sequence toFlatten){
 		int j = 0;
 		for (Element e = (notFlat.head).n1; j<notFlat.sequenceCount; e = (((notFlat.rest()).head).n1)){
-			
 			if (e instanceof Sequence){
 				flatten2((Sequence) e, toFlatten);
 			}
 			else{
 				toFlatten.add(e,flIndex);
-				flIndex++;	
+				flIndex++;
+				System.out.println("flIndex is now " + flIndex);	
 			}
 			
 			if (j == (notFlat.sequenceCount)-1){
@@ -276,6 +284,7 @@ class Sequence extends Element {
 		
 		return (get(0)).n1;
 	}
+
 	Sequence rest(){
 		// returns the rest of the elements in the sequence
 		// without creating a new sequence, only pointing to the rest of the orig sequence
@@ -326,4 +335,65 @@ class Sequence extends Element {
 		// print sequence by surrounding each sequence with [,]
 		// e.g.: [[1] [2] '3' 'c' [ 1 3 ['4' '5'] ] ]
 	}
+
+	
+	SequenceIterator begin() {
+	// gives the start of the sequence
+		SequenceIterator beginIt = new SequenceIterator();
+		beginIt.sqPtr = this.head;
+		return beginIt;
+	}
+
+	public SequenceIterator end() {
+		/*
+		Iterate until this.nextLink == NULL,
+		then, add the dummy to the next one
+		*/
+		SequenceIterator endIt = new SequenceIterator();
+		endIt.sqPtr = this.head;		
+		while ((endIt.sqPtr).nextLink != null) {
+			endIt.sqPtr = (endIt.sqPtr).nextLink;
+		}
+		MyDummy x = new MyDummy();
+		Link xLink = new Link(x);
+		(endIt.sqPtr).nextLink = xLink;
+
+		return endIt;
+		
+		/* Method One
+		SequenceIterator endIt = new SequenceIterator();
+		this.add(new MyDummy(), this.sequenceCount);
+		this.sequenceCount--;
+		endIt.sqPtr = this.get(this.sequenceCount);
+		return endIt;
+		*/
+	}
+}
+
+
+class SequenceIterator {
+
+	Link sqPtr = new Link();
+	
+	public boolean equal(SequenceIterator other) {
+	// check if two iterators point to the same thing
+		if (other.sqPtr == this.sqPtr)
+			return true;
+		return false;
+	}
+
+	SequenceIterator advance() {
+	// move the iterator forward
+		System.out.println("Moving On");
+		SequenceIterator sqIt = new SequenceIterator();
+		sqIt.sqPtr = (this.sqPtr).nextLink;
+		return sqIt;
+	}
+
+	Element get() {
+	// return the object to which the SequenceIterator points
+		return this.sqPtr.n1;
+	}
+	
+	
 }
