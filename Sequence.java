@@ -17,18 +17,14 @@ class Sequence extends Element {
 
 			int j = 0;
 			int index = 0;
-			//System.out.println("LOOK AT ME " + index);
 
 			for (Element e = (this.head).n1; j<this.sqCount(); e = (((this.rest()).head).n1)){
 				if (e instanceof Sequence){
 					nwSeq.add(((Sequence)e).copy(),index);
-					//System.out.println("sequence "+ " added to index  " + index);
 					index++;
-					//System.out.println("Bruh");
 				}
 				else{
 					nwSeq.add(e,index);
-					//System.out.println(e.i + "or " + e.c + " added to index  " + index);
 					index++;
 				}
 				if (j==sqCount()-1)
@@ -40,8 +36,8 @@ class Sequence extends Element {
 			return nwSeq;
 		
 	}
-	public static int flIndex;
 	
+	public static int flIndex;
 	public Sequence flatten(){
 
 		Sequence nwSeq = new Sequence();
@@ -52,7 +48,6 @@ class Sequence extends Element {
 		nwSeq.sequenceCount = flIndex;
 		//System.out.println("sqCount: " + nwSeq.sequenceCount);
 		return nwSeq;
-		
 	}
 	
 	public static void flatten2(Sequence notFlat, Sequence toFlatten){
@@ -66,17 +61,14 @@ class Sequence extends Element {
 				flIndex++;
 				//System.out.println("flIndex is now " + flIndex);	
 			}
-			
 			if (j == (notFlat.sqCount())-1){
 				break;
 			}
 			j++;
 		}
-		
 	}
 	
 	Link getLink(int index){
-		
 		Link gottenLink=this.head;
 		//if (index == this.sequenceCount)
 			//System.out.println("trying to get index this.sequenceCount");
@@ -89,10 +81,7 @@ class Sequence extends Element {
 		if (pos>this.sqCount()-1){
 			//error
 		}
-		
-			return (this.getLink(pos)).n1;
-		
-		
+		return (this.getLink(pos)).n1;
 	}
 	
 	public int sqCount() {
@@ -109,11 +98,8 @@ class Sequence extends Element {
 	}
 	
 	Element first(){
-		// returns first element of sequence
-		// pointer to the first and last element
-		// -- implement linked list
-		//Element * ptr = ;
-		
+		/* NEED TO FIX SO THAT WHEN HEAD ELEMENT IS PRINTED,
+		NO SPACE IS INCLUDED */
 		return (this.head).n1;
 	}
 
@@ -131,11 +117,6 @@ class Sequence extends Element {
 	}
 	
 	void add(Element elm, int pos){
-		// method to add an element in a specified position
-		// if element already exists at pos, elm is inserted at pos
-		// all elements starting at location pos are pushed to the right
-		// if pos is not between 0 and length of Sequence, throw error
-	
 		if (pos > this.sqCount()){
 			System.exit(1);
 			// add error!!!
@@ -166,18 +147,17 @@ class Sequence extends Element {
 	}
 	
 	public void Print(){
-		System.out.print(" [");
+		System.out.print("[ ");
+		
+		//ADD A CASE HERE FOR PRINTING ANOTHER SEQUENCE
+		//need to print [ [ 0 ] 0 ] instead of [[0 ] ]
+		
 		for (int p=0; p < this.sqCount(); p++){
 			((this.getLink(p)).n1).Print();
+			System.out.print(" ");
 		}
-		System.out.print("] ");
+		System.out.print("]");
 	}
-	
-	void PrintSequence() {
-		// print sequence by surrounding each sequence with [,]
-		// e.g.: [[1] [2] '3' 'c' [ 1 3 ['4' '5'] ] ]
-	}
-
 	
 	SequenceIterator begin() {
 	// gives the start of the sequence
@@ -187,10 +167,9 @@ class Sequence extends Element {
 	}
 
 	public SequenceIterator end() {
-		/*
-		Iterate until this.nextLink == NULL,
-		then, add the dummy to the next one
-		*/
+		/* Iterate until this.nextLink == NULL,
+		then, add the dummy to the next one */
+		
 		SequenceIterator endIt = new SequenceIterator();
 		if ((this.getLink(this.sqCount())) == null){
 			MyDummy x = new MyDummy();

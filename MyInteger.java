@@ -12,6 +12,6 @@ class MyInteger extends Element {
 		this.i = val;
 	}			
 	public void Print(){
-		System.out.print(" " + this.i + " ");
+		System.out.print(this.i);
 	}
 }
