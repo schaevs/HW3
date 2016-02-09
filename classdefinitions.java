@@ -37,44 +37,58 @@ public class classdefinitions{
 		list4.add(new MyChar('G'),0);
 		list2.add(list4,1);
 		
-		System.out.println("checking list2 ");
-		list2.PrintElement();
-		System.out.println("checking list ");
-		list.PrintElement();
+		//System.out.println("checking list2 ");
+		//list2.PrintElement();
+		//System.out.println("checking list ");
+		//list.PrintElement();
 		
 		list.add(list2,1);
 		
-		System.out.println("added list2 to list ... checking list ");
-		list.PrintElement();
+		//System.out.println("added list2 to list ... checking list ");
+		//list.PrintElement();
 		
 		Sequence list3 = list.copy();
-		
-		System.out.println("printing the copy");
+		//list3.PrintElement();
+		//System.out.println("printing the copy");
 		//list3.PrintElement();
 		
-		System.out.println("printing the flat version");
-		(list3.flatten()).PrintElement();
+		//System.out.println("printing the flat version");
+		//(list3.flatten()).PrintElement();
 		
 		//testing Part 4
 		
 		SequenceIterator it = new SequenceIterator();
-		if (it.equal(list3.end()))
+		//list3.PrintElement();
+		it = list3.begin();
+		//System.out.println(list3.sequenceCount);
+		//it.advance();
+		//((it.sqPtr).n1).PrintElement();
+		
+		//it = list3.end();
+		//System.out.println(list3.sequenceCount);
+		//((it.sqPtr).n1).PrintElement();
+		
+		/*if ((it).equal(it))
 			System.out.println("Equal");
-
-/*
+		list3.PrintElement();
+		System.out.println("list3's sequenceCount is" + list3.sequenceCount); */
+			list3.PrintElement();
+		int fuck = 0;
 		for (it = list3.begin(); !it.equal(list3.end()); it.advance()) {
 			// not working because?
-			System.out.println("I'm woking...");
-			//(it.sqPtr).n1.PrintElement();
-		} */
-
+			
+			System.out.println("I'm woking..." + fuck);
+			fuck++;
+			(it.sqPtr).n1.PrintElement();
+		} 
+       
 	}
 	
 	public static void printcheck(Sequence checkedSequence)
 	{
 		System.out.println("\n\nsequence count is: " + checkedSequence.length());
 		for (int k = 0; k<checkedSequence.length(); k++){
-			System.out.println("printing "+ ((checkedSequence.get(k)).n1).i);
+			System.out.println("printing "+ ((checkedSequence.getLink(k)).n1).i);
 		}
 		
 	}
@@ -101,6 +115,7 @@ class MyDummy extends Element {
 		int i = -1;
 	}
 	public void PrintElement(){
+		System.out.println("im a MyDummy");
 	}
 }
 
@@ -199,6 +214,8 @@ class Sequence extends Element {
 					break;
 				j++;
 			}
+			
+			nwSeq.sequenceCount = this.sequenceCount;
 			return nwSeq;
 		
 	}
@@ -236,7 +253,7 @@ class Sequence extends Element {
 			else{
 				toFlatten.add(e,flIndex);
 				flIndex++;
-				System.out.println("flIndex is now " + flIndex);	
+				//System.out.println("flIndex is now " + flIndex);	
 			}
 			
 			if (j == (notFlat.sequenceCount)-1){
@@ -258,9 +275,11 @@ class Sequence extends Element {
 		}
 	}*/
 	
-	Link get(int index){
+	Link getLink(int index){
 		
-		Link gottenLink=head;
+		Link gottenLink=this.head;
+		//if (index == this.sequenceCount)
+			//System.out.println("trying to get index this.sequenceCount");
 		for(int i=0; i<index; i++)
 			gottenLink = gottenLink.nextLink;
 		return gottenLink;		
@@ -271,7 +290,7 @@ class Sequence extends Element {
 			//error
 		}
 		
-			return (this.get(pos)).n1;
+			return (this.getLink(pos)).n1;
 		
 		
 	}
@@ -282,13 +301,13 @@ class Sequence extends Element {
 		// -- implement linked list
 		//Element * ptr = ;
 		
-		return (get(0)).n1;
+		return (getLink(0)).n1;
 	}
 
 	Sequence rest(){
 		// returns the rest of the elements in the sequence
 		// without creating a new sequence, only pointing to the rest of the orig sequence
-		this.head = this.get(1);
+		this.head = this.getLink(1);
 		return this;
 	}
 	
@@ -306,11 +325,12 @@ class Sequence extends Element {
 		}
 		else{
 			Link newLink = new Link(elm);
-			newLink.nextLink = this.get(pos);
+			if (pos<this.sequenceCount)
+				newLink.nextLink = this.getLink(pos);
 			if (pos == 0)
 				head = newLink;
 			else
-				(this.get(pos-1)).nextLink = newLink;
+				(this.getLink(pos-1)).nextLink = newLink;
 			sequenceCount++;
 		}
 	}
@@ -318,14 +338,14 @@ class Sequence extends Element {
 	void delete(int pos) {
 		// method to remove an element at specified position
 		// after deleting, all elements to the right are pushed to the left
-		(this.get(pos-1)).nextLink = (this.get(pos)).nextLink;
+		(this.getLink(pos-1)).nextLink = (this.getLink(pos)).nextLink;
 		sequenceCount--;
 	}
 	
 	public void PrintElement(){
 		System.out.print(" [");
 		for (int p=0; p < sequenceCount; p++){
-			((this.get(p)).n1).PrintElement();
+			((this.getLink(p)).n1).PrintElement();
 			//System.out.print(" ");
 		}
 		System.out.print("] ");
@@ -350,14 +370,13 @@ class Sequence extends Element {
 		then, add the dummy to the next one
 		*/
 		SequenceIterator endIt = new SequenceIterator();
-		endIt.sqPtr = this.head;		
-		while ((endIt.sqPtr).nextLink != null) {
-			endIt.sqPtr = (endIt.sqPtr).nextLink;
+		if ((this.getLink(this.sequenceCount)) == null){
+			MyDummy x = new MyDummy();
+			this.add(x,this.sequenceCount);
+			this.sequenceCount--;
 		}
-		MyDummy x = new MyDummy();
-		Link xLink = new Link(x);
-		(endIt.sqPtr).nextLink = xLink;
-
+		endIt.sqPtr = this.getLink(sequenceCount);
+		
 		return endIt;
 		
 		/* Method One
@@ -384,10 +403,10 @@ class SequenceIterator {
 
 	SequenceIterator advance() {
 	// move the iterator forward
-		System.out.println("Moving On");
-		SequenceIterator sqIt = new SequenceIterator();
-		sqIt.sqPtr = (this.sqPtr).nextLink;
-		return sqIt;
+		//System.out.println("Moving On");
+		//SequenceIterator sqIt = new SequenceIterator();
+		this.sqPtr = (this.sqPtr).nextLink;
+		return this;
 	}
 
 	Element get() {
