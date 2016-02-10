@@ -6,7 +6,7 @@ class Sequence extends Element {
 	private Link head;
 	public int sequenceCount;
 	
-	public Sequence(){
+	public Sequence() {
 		head = null;
 		sequenceCount = 0;
 	}
@@ -41,38 +41,29 @@ class Sequence extends Element {
 				//i++;
 			}
 			else if(current.Get() instanceof Sequence){
-				Sequence cpy = new Sequence();
-				Sequence s = ((Sequence)current.Get()).copy();//creates a shallow copy for me to do easier referencing
-				Link c = s.head;
-				while(c != null){
-					Link n = new Link(c.Get()); 
-					cpy.add(n.Get(),cpy.sequenceCount);
-					cpy.sequenceCount++;
-					c = c.nextLink;
-
-					/* Tried something; didn't work.
-					if (c.Get() instanceof MyInteger) {
-						MyInteger newInt = new MyInteger();
-						newInt = (MyInteger)(c.Get());
-						cpy.add(newInt, i);
+				/* RECURSIVE CASE: we got a sequence, and inside that sequence is another sequence
+						   so, we need to recursively call copy as long as it's a sequence */
+				if (current.Get() instanceof Sequence) {
+					Sequence s = ((Sequence)current.Get()).copy();
+				}
+				/* BASE CASE: we got a sequence, and inside is just variables, NOT another sq
+					      so we need to deal with that accordingly.
+					      the else if below doesn't really hit though, right?? */
+				else if (current.Get() instanceof MyInteger || current.Get() instanceof MyChar) {
+					Sequence cpy = new Sequence();
+					Link c = new Link(current.Get());
+					while(c != null){
+						Link n = new Link(c.Get()); 
+						System.out.println("In here");
+						cpy.add(n.Get(),cpy.sequenceCount);
 						cpy.sequenceCount++;
+						c = c.nextLink;
 					}
-					else if (c.Get() instanceof MyChar) {
-						MyChar newChar = new MyChar();
-						newChar = (MyChar)(c.Get());
-						cpy.add(newChar, i);
-						cpy.sequenceCount++;
-					}
-					else if (c.Get() instanceof Sequence) {
-						Sequence ss = ((Sequence)(c.Get())).copy(); //call it recusively
-					}
-					c = c.nextLink; */
-				} 	
-				//cpy  = add(((Sequence)current.getData()).copy(), 0); //recursive copy
 				newSeq.add(cpy,i);
 				newSeq.sequenceCount++;
+				}	
+				//cpy.add(((Sequence)current.Get()).copy(), 0); //recursive copy
 			}
-			
 			i++;
 			current = current.nextLink;
 		}//end of while loop
