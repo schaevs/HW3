@@ -11,62 +11,28 @@ class Sequence extends Element {
 		sequenceCount = 0;
 	}
 
-
 	public Sequence copy(){ //produces deep copy of elements
-		Sequence newSeq = new Sequence(); //our new copy
-
-		int i = 0; //used to iterate thru
-		Link current = this.getLink(0); //get head node
-
-		while(current != null){
-			//System.out.println(current.getData());
-			if (current.Get() instanceof MyInteger){
-				//System.out.println(" INT:");
-                                //Link newLink = new Link(current.Get());		
-				//newSeq.add(newLink.Get(), i);
-				MyInteger newInt = new MyInteger();
-				newInt = (MyInteger)(current.Get());
-				newSeq.add(newInt, i);
-				newSeq.sequenceCount++;	
-				//i++;
-			}
-			else if (current.Get() instanceof MyChar){
-				//System.out.println(" CHAR:");
-                                //Link newLink = new Link(current.Get());		
-				//newSeq.add(newLink.Get(), i);
-				MyChar newChar = new MyChar();
-				newChar = (MyChar)(current.Get());
-				newSeq.add(newChar, i);
+		Sequence newSeq = new Sequence();
+		int j = 0;
+		int index = 0;
+		//for ( Element e = (this.head).Get(); j < this.sequenceCount; e = ((this.rest()).head).Get() ) {
+		for ( Element e = index(j); j < this.sequenceCount; e = index(j)) {
+			if (e instanceof MyInteger || e instanceof MyChar){
+                Link newLink = new Link(e);		
+				newSeq.add(newLink.Get(), index);
+				index++;
 				newSeq.sequenceCount++;
-				//i++;
 			}
-			else if(current.Get() instanceof Sequence){
-				/* RECURSIVE CASE: we got a sequence, and inside that sequence is another sequence
-						   so, we need to recursively call copy as long as it's a sequence */
-				if (current.Get() instanceof Sequence) {
-					Sequence s = ((Sequence)current.Get()).copy();
-				}
-				/* BASE CASE: we got a sequence, and inside is just variables, NOT another sq
-					      so we need to deal with that accordingly.
-					      the else if below doesn't really hit though, right?? */
-				else if (current.Get() instanceof MyInteger || current.Get() instanceof MyChar) {
-					Sequence cpy = new Sequence();
-					Link c = new Link(current.Get());
-					while(c != null){
-						Link n = new Link(c.Get()); 
-						System.out.println("In here");
-						cpy.add(n.Get(),cpy.sequenceCount);
-						cpy.sequenceCount++;
-						c = c.nextLink;
-					}
-				newSeq.add(cpy,i);
-				newSeq.sequenceCount++;
-				}	
-				//cpy.add(((Sequence)current.Get()).copy(), 0); //recursive copy
+			else {
+				//((Sequence)e).copy();
+				newSeq.add(((Sequence)e).copy(), index);
+				index++;
 			}
-			i++;
-			current = current.nextLink;
-		}//end of while loop
+			if (j==sequenceCount-1)
+				break;
+			j++;
+			
+		}
 		return newSeq;
 	}	
 	
