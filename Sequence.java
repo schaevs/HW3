@@ -1,7 +1,5 @@
 class Sequence extends Element {
-	//Element content;
-	//Sequence next;
-	
+
 	//contains what is necessary to produce a list of elements
 	//should include dynamic sizing and other functions mentioned in hw
 	
@@ -12,66 +10,74 @@ class Sequence extends Element {
 		head = null;
 		sequenceCount = 0;
 	}
-	public Sequence copy(){
-		Sequence nwSeq = new Sequence();
 
-			int j = 0;
-			int index = 0;
 
-			for (Element e = (this.head).n1; j<this.sqCount(); e = (((this.rest()).head).n1)){
-				if (e instanceof Sequence){
-					nwSeq.add(((Sequence)e).copy(),index);
-					index++;
-				}
-				else{
-					nwSeq.add(e,index);
-					index++;
-				}
-				if (j==sqCount()-1)
-					break;
-				j++;
+	public Sequence copy(){ //produces deep copy of elements
+		Sequence newSeq = new Sequence(); //our new copy
+
+		int i = 0; //used to iterate thru
+		Link current = this.getLink(0); //get head node
+
+		while(current != null){
+			//System.out.println(current.getData());
+			if (current.Get() instanceof MyInteger){
+				//System.out.println(" INT:");
+				Link newLink = new Link(current.Get()); 
+				newSeq.add(newLink.Get(), i);
+				newSeq.sequenceCount++;	
+				//i++;
+			}
+			else if (current.Get() instanceof MyChar){
+				//System.out.println(" CHAR:");
+                                Link newLink = new Link(current.Get());		
+				newSeq.add(newLink.Get(), i);
+				newSeq.sequenceCount++;
+				//i++;
+			}
+			else if(current.Get() instanceof Sequence){
+					Sequence cpy = new Sequence();
+				 	Sequence s = ((Sequence)current.Get()).copy();//creates a shallow copy for me to do easier referencing
+					Link c = s.head;
+					while(c != null){
+						Link n = new Link(c.Get());
+						cpy.add(n.Get(),cpy.sequenceCount);
+						cpy.sequenceCount++;
+						c = c.nextLink; 
+					} 	
+					//cpy  = add(((Sequence)current.getData()).copy(), 0); //recursive copy
+					newSeq.add(cpy,i);
+					newSeq.sequenceCount++;
 			}
 			
-			nwSeq.sequenceCount = this.sqCount();
-			return nwSeq;
-		
-	}
+			i++;
+			current = current.nextLink;
+		}//end of while loop
+		return newSeq;
+	}	
 	
-	public static int flIndex;
 	public Sequence flatten(){
-
-		Sequence nwSeq = new Sequence();
-		Sequence olSeq = this.copy();
-		flIndex = 0;
-		flatten2(olSeq,nwSeq);
-
-		nwSeq.sequenceCount = flIndex;
-		//System.out.println("sqCount: " + nwSeq.sequenceCount);
-		return nwSeq;
+		Sequence flSeq = new Sequence();
+		Sequence nfSeq = new Sequence();
+		nfSeq.head = this.head;
+		flatten2(nfSeq,flSeq);
+		return flSeq;
 	}
-	
-	public static void flatten2(Sequence notFlat, Sequence toFlatten){
-		int j = 0;
-		for (Element e = (notFlat.head).n1; j<notFlat.sqCount(); e = (((notFlat.rest()).head).n1)){
-			if (e instanceof Sequence){
-				flatten2((Sequence) e, toFlatten);
-			}
-			else{
-				toFlatten.add(e,flIndex);
-				flIndex++;
-				//System.out.println("flIndex is now " + flIndex);	
-			}
-			if (j == (notFlat.sqCount())-1){
+
+	public static void flatten2(Sequence notFlatOG, Sequence newFlatOne){
+		Link l = notFlatOG.head;
+		while (l != null){
+			if (l.n1 instanceof MyDummy)
 				break;
-			}
-			j++;
+			if ((l.n1 instanceof MyInteger) || (l.n1 instanceof MyChar))
+				newFlatOne.add(l.n1, newFlatOne.sqCount());
+			else if (l.n1 instanceof Sequence)
+				flatten2((Sequence)(l.n1),newFlatOne);
+			l = l.nextLink;
 		}
 	}
 	
 	Link getLink(int index){
 		Link gottenLink=this.head;
-		//if (index == this.sequenceCount)
-			//System.out.println("trying to get index this.sequenceCount");
 		for(int i=0; i<index; i++)
 			gottenLink = gottenLink.nextLink;
 		return gottenLink;		
@@ -79,7 +85,8 @@ class Sequence extends Element {
 	
 	public Element index(int pos){
 		if (pos>this.sqCount()-1){
-			//error
+			System.out.println("That position doesn't fall in the range, bruh. Exiting now.");
+			System.exit(1);
 		}
 		return (this.getLink(pos)).n1;
 	}
@@ -98,8 +105,6 @@ class Sequence extends Element {
 	}
 	
 	Element first(){
-		/* NEED TO FIX SO THAT WHEN HEAD ELEMENT IS PRINTED,
-		NO SPACE IS INCLUDED */
 		return (this.head).n1;
 	}
 
@@ -118,8 +123,7 @@ class Sequence extends Element {
 	
 	void add(Element elm, int pos){
 		if (pos > this.sqCount()){
-			System.exit(1);
-			// add error!!!
+			//System.exit(1);
 		}
 		else{
 			Link newLink = new Link(elm);
@@ -148,10 +152,6 @@ class Sequence extends Element {
 	
 	public void Print(){
 		System.out.print("[ ");
-		
-		//ADD A CASE HERE FOR PRINTING ANOTHER SEQUENCE
-		//need to print [ [ 0 ] 0 ] instead of [[0 ] ]
-		
 		for (int p=0; p < this.sqCount(); p++){
 			((this.getLink(p)).n1).Print();
 			System.out.print(" ");
@@ -179,6 +179,5 @@ class Sequence extends Element {
 		endIt.sqPtr = this.getLink(this.sqCount());
 		
 		return endIt;
-
 	}
 }
