@@ -22,31 +22,55 @@ class Sequence extends Element {
 			//System.out.println(current.getData());
 			if (current.Get() instanceof MyInteger){
 				//System.out.println(" INT:");
-				Link newLink = new Link(current.Get()); 
-				newSeq.add(newLink.Get(), i);
+                                //Link newLink = new Link(current.Get());		
+				//newSeq.add(newLink.Get(), i);
+				MyInteger newInt = new MyInteger();
+				newInt = (MyInteger)(current.Get());
+				newSeq.add(newInt, i);
 				newSeq.sequenceCount++;	
 				//i++;
 			}
 			else if (current.Get() instanceof MyChar){
 				//System.out.println(" CHAR:");
-                                Link newLink = new Link(current.Get());		
-				newSeq.add(newLink.Get(), i);
+                                //Link newLink = new Link(current.Get());		
+				//newSeq.add(newLink.Get(), i);
+				MyChar newChar = new MyChar();
+				newChar = (MyChar)(current.Get());
+				newSeq.add(newChar, i);
 				newSeq.sequenceCount++;
 				//i++;
 			}
 			else if(current.Get() instanceof Sequence){
-					Sequence cpy = new Sequence();
-				 	Sequence s = ((Sequence)current.Get()).copy();//creates a shallow copy for me to do easier referencing
-					Link c = s.head;
-					while(c != null){
-						Link n = new Link(c.Get());
-						cpy.add(n.Get(),cpy.sequenceCount);
+				Sequence cpy = new Sequence();
+				Sequence s = ((Sequence)current.Get()).copy();//creates a shallow copy for me to do easier referencing
+				Link c = s.head;
+				while(c != null){
+					Link n = new Link(c.Get()); 
+					cpy.add(n.Get(),cpy.sequenceCount);
+					cpy.sequenceCount++;
+					c = c.nextLink;
+
+					/* Tried something; didn't work.
+					if (c.Get() instanceof MyInteger) {
+						MyInteger newInt = new MyInteger();
+						newInt = (MyInteger)(c.Get());
+						cpy.add(newInt, i);
 						cpy.sequenceCount++;
-						c = c.nextLink; 
-					} 	
-					//cpy  = add(((Sequence)current.getData()).copy(), 0); //recursive copy
-					newSeq.add(cpy,i);
-					newSeq.sequenceCount++;
+					}
+					else if (c.Get() instanceof MyChar) {
+						MyChar newChar = new MyChar();
+						newChar = (MyChar)(c.Get());
+						cpy.add(newChar, i);
+						cpy.sequenceCount++;
+					}
+					else if (c.Get() instanceof Sequence) {
+						Sequence ss = ((Sequence)(c.Get())).copy(); //call it recusively
+					}
+					c = c.nextLink; */
+				} 	
+				//cpy  = add(((Sequence)current.getData()).copy(), 0); //recursive copy
+				newSeq.add(cpy,i);
+				newSeq.sequenceCount++;
 			}
 			
 			i++;
