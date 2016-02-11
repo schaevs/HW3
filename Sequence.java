@@ -3,7 +3,7 @@ class Sequence extends Element {
 	//contains what is necessary to produce a list of elements
 	//should include dynamic sizing and other functions mentioned in hw
 	
-	private Link head;
+	public Link head;
 	public int sequenceCount;
 	
 	public Sequence() {
@@ -17,11 +17,28 @@ class Sequence extends Element {
 		int index = 0;
 		//for ( Element e = (this.head).Get(); j < this.sequenceCount; e = ((this.rest()).head).Get() ) {
 		for ( Element e = index(j); j < this.sequenceCount; e = index(j)) {
-			if (e instanceof MyInteger || e instanceof MyChar){
+			if (e instanceof MyInteger || e instanceof MyChar) {
+			    if (e instanceof MyInteger) {
+			        MyInteger newInt = new MyInteger();
+			        newInt.Set(((MyInteger)e).Get());
+				    newSeq.add(newInt, index);//newLink.Get(), index);
+				    index++;
+				    newSeq.sequenceCount++;
+			    }
+			    else { // e instanceof MyChar
+                    MyChar newChar = new MyChar();
+                    newChar.Set(((MyChar)e).Get());
+				    newSeq.add(newChar, index);//newLink.Get(), index);
+			    	index++;
+			    	newSeq.sequenceCount++;  
+			    }
+			    /*
                 Link newLink = new Link(e);		
-				newSeq.add(newLink.Get(), index);
+				newSeq.add(e, index);//newLink.Get(), index);
 				index++;
 				newSeq.sequenceCount++;
+				*/
+				
 			}
 			else {
 				//((Sequence)e).copy();
@@ -65,8 +82,9 @@ class Sequence extends Element {
 	}
 	
 	public Element index(int pos){
-		if (pos>this.sqCount()-1){
-			System.out.println("That position doesn't fall in the range, bruh. Exiting now.");
+		if (pos>(this.sqCount()-1)){
+		    //System.out.println("m1 * m2 = Matrix dimensions incompatible for Product");
+			//System.out.println("That position doesn't fall in the range, bruh. Exiting now.");
 			System.exit(1);
 		}
 		return (this.getLink(pos)).n1;
@@ -131,7 +149,7 @@ class Sequence extends Element {
 		sequenceCount--;
 	}
 	
-	public void Print(){
+	void Print(){
 		System.out.print("[ ");
 		for (int p=0; p < this.sqCount(); p++){
 			((this.getLink(p)).n1).Print();
